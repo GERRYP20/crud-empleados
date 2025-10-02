@@ -15,8 +15,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     // Consulta robusta para obtener todos los datos necesarios del empleado
     $sql = $conn->prepare("
-        SELECT
-            e.*,
+        SELECT 
+            e.*, 
             d.CALLE, d.NUMERO_EXTERIOR, d.NUMERO_INTERIOR, d.COLONIA, d.ID_MUNICIPIO,
             p.ID_PAIS,
             est.ID_ESTADO,
@@ -60,7 +60,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         <h1 class="h4 mb-0"><?= htmlspecialchars($page_title) ?></h1>
                         
                         <form action="index.php" method="GET" class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Buscar empleado por ID" aria-label="Buscar" name="id" required>
+                            <input class="form-control me-2" type="search" placeholder="Buscar empleado por ID" aria-label="Buscar" name="id">
                             <button class="btn btn-light" type="submit">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
@@ -86,8 +86,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         <input type="text" class="form-control" value="<?= htmlspecialchars($empleado_data['ID_EMPLEADO'] ?? '') ?>" readonly style="background-color: #e9ecef;">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="fecha_contratacion" class="form-label">Fecha de Contratación</label>
-                                        <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion_empleado" value="<?= htmlspecialchars($empleado_data['FECHA_CONTRATACION'] ?? '') ?>">
+                                        <label for="fecha_contratacion" class="form-label">Fecha de Contratación <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion_empleado" value="<?= htmlspecialchars($empleado_data['FECHA_CONTRATACION'] ?? '') ?>" required>
+                                        <div class="invalid-feedback">Por favor, seleccione una fecha de contratación.</div>
                                     </div>
                                 </div>
                                 <hr class="my-4">
@@ -109,7 +110,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="departamento" class="form-label">Departamento</label>
+                                    <label for="departamento" class="form-label">Departamento <span class="text-danger">*</span></label>
                                     <select class="form-select" id="departamento" name="departamento_empleado" required>
                                         <option selected disabled value="">Seleccione...</option>
                                         <?php
@@ -120,9 +121,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             }
                                         ?>
                                     </select>
+                                    <div class="invalid-feedback">Por favor, seleccione un departamento.</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="rol_empleado" class="form-label">Rol del Empleado</label>
+                                    <label for="rol_empleado" class="form-label">Rol del Empleado <span class="text-danger">*</span></label>
                                     <select id="rol_empleado" name="rol_empleado" class="form-select" required>
                                         <option value="" selected disabled>-- Seleccionar un rol --</option>
                                         <?php
@@ -134,6 +136,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         }
                                         ?>
                                     </select>
+                                    <div class="invalid-feedback">Por favor, seleccione un rol.</div>
                                 </div>
                             </div>
 
@@ -143,22 +146,25 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label for="nombre" class="form-label">Nombre(s) <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nombre" required name="nombre_empleado" value="<?= htmlspecialchars($empleado_data['NOMBRE_EMPLEADO'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="nombre" name="nombre_empleado" value="<?= htmlspecialchars($empleado_data['NOMBRE_EMPLEADO'] ?? '') ?>" required maxlength="50" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+">
+                                    <div class="invalid-feedback">El nombre es obligatorio y solo debe contener letras y espacios.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="apellidoPaterno" class="form-label">Apellido Paterno</label>
-                                    <input type="text" class="form-control" id="apellidoPaterno" name="apellido_paterno_empleado" value="<?= htmlspecialchars($empleado_data['APELLIDO_PATERNO'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="apellidoPaterno" name="apellido_paterno_empleado" value="<?= htmlspecialchars($empleado_data['APELLIDO_PATERNO'] ?? '') ?>" maxlength="50" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*">
+                                    <div class="invalid-feedback">El apellido solo debe contener letras y espacios.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
-                                    <input type="text" class="form-control" id="apellidoMaterno" name="apellido_materno_empleado" value="<?= htmlspecialchars($empleado_data['APELLIDO_MATERNO'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="apellidoMaterno" name="apellido_materno_empleado" value="<?= htmlspecialchars($empleado_data['APELLIDO_MATERNO'] ?? '') ?>" maxlength="50" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*">
+                                    <div class="invalid-feedback">El apellido solo debe contener letras y espacios.</div>
                                 </div>
                             </div>
 
                             <div class="row g-3 mt-2">
                                 <div class="col-md-4">
                                     <label for="genero" class="form-label">Género <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="genero" required name="genero_empleado">
+                                    <select class="form-select" id="genero" name="genero_empleado" required>
                                         <option selected disabled value="">Seleccione...</option>
                                         <?php
                                             $sql_gen = $conn->query("SELECT ID_GENERO, NOMBRE_GENERO FROM generos ORDER BY NOMBRE_GENERO");
@@ -168,14 +174,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             }
                                         ?>
                                     </select>
+                                    <div class="invalid-feedback">Por favor, seleccione un género.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="curp" class="form-label">CURP <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="curp" required name="curp_empleado" value="<?= htmlspecialchars($empleado_data['CURP_EMPLEADO'] ?? '') ?>">
+                                    <input type="text" class="form-control text-uppercase" id="curp" name="curp_empleado" value="<?= htmlspecialchars($empleado_data['CURP_EMPLEADO'] ?? '') ?>" required minlength="18" maxlength="18" pattern="[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{2}">
+                                    <div class="invalid-feedback">Ingrese un CURP válido (18 caracteres, formato oficial).</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="rfc" class="form-label">RFC <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="rfc" required name="rfc_empleado" value="<?= htmlspecialchars($empleado_data['RFC_EMPLEADO'] ?? '') ?>">
+                                    <input type="text" class="form-control text-uppercase" id="rfc" name="rfc_empleado" value="<?= htmlspecialchars($empleado_data['RFC_EMPLEADO'] ?? '') ?>" required minlength="13" maxlength="13" pattern="[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}">
+                                    <div class="invalid-feedback">Ingrese un RFC válido (13 caracteres, formato oficial).</div>
                                 </div>
                             </div>
 
@@ -185,15 +194,18 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label for="telefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" id="telefono" required name="telefono_empleado" value="<?= htmlspecialchars($empleado_data['TELEFONO_EMPLEADO'] ?? '') ?>">
+                                    <input type="tel" class="form-control" id="telefono" name="telefono_empleado" value="<?= htmlspecialchars($empleado_data['TELEFONO_EMPLEADO'] ?? '') ?>" required pattern="[0-9]{10}" maxlength="10">
+                                    <div class="invalid-feedback">Ingrese un número de teléfono de 10 dígitos.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="correoPrincipal" class="form-label">Correo Principal</label>
-                                    <input type="email" class="form-control" id="correoPrincipal" name="correo_principal_empleado" value="<?= htmlspecialchars($empleado_data['correo_principal'] ?? '') ?>">
+                                    <input type="email" class="form-control" id="correoPrincipal" name="correo_principal_empleado" value="<?= htmlspecialchars($empleado_data['correo_principal'] ?? '') ?>" maxlength="100">
+                                    <div class="invalid-feedback">Por favor, ingrese una dirección de correo válida.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="correoSecundario" class="form-label">Correo Secundario</label>
-                                    <input type="email" class="form-control" id="correoSecundario" name="correo_secundario_empleado" value="<?= htmlspecialchars($empleado_data['correo_secundario'] ?? '') ?>">
+                                    <input type="email" class="form-control" id="correoSecundario" name="correo_secundario_empleado" value="<?= htmlspecialchars($empleado_data['correo_secundario'] ?? '') ?>" maxlength="100">
+                                    <div class="invalid-feedback">Por favor, ingrese una dirección de correo válida.</div>
                                 </div>
                             </div>
                             
@@ -203,21 +215,24 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <div class="row g-3">
                                 <div class="col-md-8">
                                     <label for="calle" class="form-label">Calle <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="calle" required name="calle_empleado" value="<?= htmlspecialchars($empleado_data['CALLE'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="calle" name="calle_empleado" value="<?= htmlspecialchars($empleado_data['CALLE'] ?? '') ?>" required maxlength="100">
+                                    <div class="invalid-feedback">La calle es obligatoria.</div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="numeroExterior" class="form-label">No. Exterior <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="numeroExterior" required name="numero_exterior_empleado" value="<?= htmlspecialchars($empleado_data['NUMERO_EXTERIOR'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="numeroExterior" name="numero_exterior_empleado" value="<?= htmlspecialchars($empleado_data['NUMERO_EXTERIOR'] ?? '') ?>" required maxlength="10">
+                                     <div class="invalid-feedback">El No. Ext. es obligatorio.</div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="numeroInterior" class="form-label">No. Interior</label>
-                                    <input type="text" class="form-control" id="numeroInterior" name="numero_interior_empleado" value="<?= htmlspecialchars($empleado_data['NUMERO_INTERIOR'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="numeroInterior" name="numero_interior_empleado" value="<?= htmlspecialchars($empleado_data['NUMERO_INTERIOR'] ?? '') ?>" maxlength="10">
                                 </div>
                             </div>
                             <div class="row g-3 mt-2">
                                 <div class="col-md-12">
                                     <label for="colonia" class="form-label">Colonia <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="colonia" required name="colonia_empleado" value="<?= htmlspecialchars($empleado_data['COLONIA'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="colonia" name="colonia_empleado" value="<?= htmlspecialchars($empleado_data['COLONIA'] ?? '') ?>" required maxlength="100">
+                                    <div class="invalid-feedback">La colonia es obligatoria.</div>
                                 </div>
                             </div>
 
@@ -227,7 +242,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                     <select class="form-select" id="pais" name="pais_empleado" required>
                                         <option value="">Seleccione un País...</option>
                                         <?php
-                                            // ----- CAMBIO 1: AÑADIDO "WHERE ESTADO_PAIS = 1" -----
                                             $sql_pais = $conn->query("SELECT ID_PAIS, NOMBRE_PAIS FROM paises WHERE ESTADO_PAIS = 1 ORDER BY NOMBRE_PAIS");
                                             while ($datos_pais = $sql_pais->fetch_assoc()) {
                                                 $selected = (isset($empleado_data['ID_PAIS']) && $empleado_data['ID_PAIS'] == $datos_pais['ID_PAIS']) ? 'selected' : '';
@@ -235,6 +249,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             }
                                         ?>
                                     </select>
+                                    <div class="invalid-feedback">Por favor, seleccione un país.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="estado" class="form-label">Estado <span class="text-danger">*</span></label>
@@ -254,6 +269,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         }
                                         ?>
                                     </select>
+                                    <div class="invalid-feedback">Por favor, seleccione un estado.</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="municipio" class="form-label">Municipio <span class="text-danger">*</span></label>
@@ -273,6 +289,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         }
                                         ?>
                                     </select>
+                                    <div class="invalid-feedback">Por favor, seleccione un municipio.</div>
                                 </div>
                             </div>
                             
@@ -280,7 +297,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                             <div class="d-flex justify-content-between align-items-center">
                                 <?php if ($edit_mode): ?>
-                                    <button type="button" class="btn btn-danger" onclick="confirmarEliminacion(<?= htmlspecialchars($id_empleado) ?>)">
+                                    <button type="button" class="btn btn-danger" onclick="confirmarEliminacion(<?= htmlspecialchars($id_empleado ?? 0) ?>)">
                                         <i class="fa-solid fa-trash"></i> Eliminar Empleado
                                     </button>
                                 <?php else: ?>
@@ -294,7 +311,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                     </button>
                                 </div>
                             </div>
-                            </form>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -305,23 +322,38 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Función para confirmar la eliminación
+        // --- SCRIPT DE VALIDACIÓN DE BOOTSTRAP ---
+        (function () {
+          'use strict'
+          var forms = document.querySelectorAll('.needs-validation')
+          Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+              form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                  event.preventDefault()
+                  event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+              }, false)
+            })
+        })();
+
+        // --- FUNCIÓN PARA CONFIRMAR ELIMINACIÓN ---
         function confirmarEliminacion(id) {
-            if (confirm("¿Estás realmente seguro de que deseas eliminar este empleado? Esta acción es irreversible.")) {
-                // Pequeña corrección aquí para concatenar el ID correctamente
+            if (id > 0 && confirm("¿Estás realmente seguro de que deseas eliminar este empleado? Esta acción es irreversible.")) {
                 window.location.href = "controlador/eliminar_empleado.php?id=" + id;
             }
         }
 
+        // --- SCRIPT PARA UBICACIONES (PAÍS, ESTADO, MUNICIPIO) ---
         $(document).ready(function(){
-            // ----- CAMBIO 2: SCRIPT AJAX REVERTIDO A LA VERSIÓN ANTERIOR -----
             $('#pais').on('change', function(){
                 var paisId = $(this).val();
                 if(paisId){
                     $.ajax({
                         type: 'POST',
                         url: 'get_ubicaciones.php',
-                        data: 'pais_id=' + paisId, // Se envía como STRING
+                        data: 'pais_id=' + paisId,
                         success: function(html){
                             $('#estado').html(html).prop('disabled', false); 
                             $('#municipio').html('<option value="">Seleccione un Municipio...</option>').prop('disabled', true);
@@ -339,7 +371,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     $.ajax({
                         type: 'POST',
                         url: 'get_ubicaciones.php',
-                        data: 'estado_id=' + estadoId, // Se envía como STRING
+                        data: 'estado_id=' + estadoId,
                         success: function(html){
                             $('#municipio').html(html).prop('disabled', false);
                         }
