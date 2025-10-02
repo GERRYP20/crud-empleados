@@ -12,7 +12,7 @@
 
     <div class="container mt-5 mb-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h3">Lista de Empleados</h1>
+            <h1 class="h3">Lista de Empleadosss</h1>
             <a href="index.php" class="btn btn-primary">Agregar Nuevo Empleado</a>
         </div>
 
